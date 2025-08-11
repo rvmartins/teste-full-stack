@@ -11,9 +11,19 @@
 |
 */
 
+// Rota padrão do Laravel - COMENTADA
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Rotas Web comentadas! Não utilizaremos, por enquanto, no projeto.
+*/
+
+// Route::get('/', function () {
+//     return view('home');
+// });
 
 /*
 |--------------------------------------------------------------------------
@@ -27,21 +37,18 @@ Route::get('/', function () {
 | PUT  /entidades/{id}      - Processar edição
 | DELETE /entidades/{id}    - Excluir
 */
-Route::resource('entidades', 'EntidadesController');
+// Route::resource('entidades', 'EntidadesController');
 
 /*
 |--------------------------------------------------------------------------
 | Rotas Web para Especialidades - Interface Web
 |--------------------------------------------------------------------------
 */
-Route::resource('especialidades', 'EspecialidadesController');
+// Route::resource('especialidades', 'EspecialidadesController');
 
 /*
 |--------------------------------------------------------------------------
 | Rotas Web para Usuários - Interface Web
 |--------------------------------------------------------------------------
 */
-Route::resource('users', 'UsersController');
-
-
-
+// Route::resource('users', 'UsersController');
