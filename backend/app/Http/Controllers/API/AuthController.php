@@ -34,13 +34,20 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
+            // Debug: Log quando usuário não é encontrado
+            \Log::info('Login falhou: usuário não encontrado para email: ' . $request->email);
             return response()->json([
                 'success' => false,
                 'message' => 'Email ou senha incorretos',
             ], 401);
         }
 
+        // Debug: Log tentativa de login
+        \Log::info('Tentativa de login para: ' . $user->email . ' | Senha digitada: ' . $request->password . ' | Hash no banco: ' . $user->password);
+
         if (!password_verify($request->password, $user->password)) {
+            // Debug: Log quando senha não confere
+            \Log::info('Login falhou: senha incorreta para: ' . $user->email);
             return response()->json([
                 'success' => false,
                 'message' => 'Email ou senha incorretos',

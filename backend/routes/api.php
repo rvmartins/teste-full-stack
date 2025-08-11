@@ -49,6 +49,11 @@ Route::get('status', function () {
 |--------------------------------------------------------------------------
 */
 
+// Suporte a OPTIONS (CORS preflight)
+Route::options('{any}', function () {
+    return response('', 200);
+})->where('any', '.*');
+
 // Registro de novos usuários
 Route::post('register', 'API\AuthController@register');
 // Login de usuários existentes
