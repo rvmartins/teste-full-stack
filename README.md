@@ -101,6 +101,22 @@ A API utiliza **Bearer Token**. Inclua o token no header das requisições prote
 Authorization: Bearer {seu_token}
 ```
 
+### **Testando com Postman**
+Uma collection completa do Postman está disponível no arquivo:
+```
+backend/Postman_collection.json
+```
+
+**Como usar:**
+1. Abra o Postman
+2. Clique em **Import** 
+3. Selecione o arquivo `backend/Postman_collection.json`
+4. Configure as variáveis de ambiente:
+   - `base_url`: `http://localhost:8000`
+   - `token`: (será preenchido automaticamente após login)
+
+A collection inclui todos os endpoints documentados com exemplos de requisições e variáveis automáticas.
+
 ---
 
 ## 🔓 **Endpoints Públicos**
@@ -550,6 +566,52 @@ docker exec -it frontend_app npm install
 2. Consulte os logs dos containers
 3. Verifique se todas as portas estão livres (4200, 8000, 3306)
 4. Abra uma issue no repositório com os logs de erro
+
+---
+
+## 🚀 **Roadmap - Implementações Futuras**
+
+### 🔐 **Melhorias de Segurança**
+- **Expiração automática de tokens** - Tokens com TTL configurável
+- **Rate limiting avançado** - Proteção contra ataques de força bruta  
+- **Refresh tokens** - Sistema de renovação segura de tokens
+- **Log de auditoria** - Rastreamento de ações dos usuários
+- **2FA (Two-Factor Authentication)** - Autenticação em duas etapas
+- **RBAC (Role-Based Access Control)** - Sistema de papéis e permissões
+- **Criptografia de dados sensíveis** - Proteção de informações médicas
+- **Validação de entrada robusta** - Sanitização e validação avançada
+
+### 🚀 **Escalabilidade e Performance**
+- **Redis para cache** - Cache de consultas e sessões
+- **Database indexing** - Otimização de consultas frequentes
+- **Compressão de resposta** - Gzip/Deflate para APIs
+- **Paginação otimizada** - Cursor-based pagination
+- **Queue system** - Processamento assíncrono de tarefas
+- **Load balancing** - Múltiplas instâncias do backend
+- **CDN integration** - Distribuição de assets estáticos
+- **Elasticsearch** - Busca avançada e analytics
+- **Microserviços** - Separação de responsabilidades
+
+### 🧪 **Qualidade de Código**
+- **Testes automatizados** - Unit tests para controllers e models
+- **GitHub Actions CI/CD** - Pipeline básico de deploy
+- **PHPStan análise estática** - Detecção de bugs e type safety
+- **ESLint/Prettier** - Padronização do código frontend
+- **Integration e E2E tests** - Testes de ponta a ponta
+- **Code coverage reporting** - Cobertura mínima de 80%
+- **Swagger/OpenAPI** - Documentação automática da API
+- **Conventional commits** - Padrão de commits e changelog automático
+
+### 📊 **Monitoramento e Observabilidade**
+- **Health checks** - Endpoints de saúde da aplicação
+- **Logs estruturados** - Logging em formato JSON
+- **Error tracking básico** - Captura e notificação de erros
+- **Database monitoring** - Métricas de performance do DB
+- **Prometheus + Grafana** - Métricas e dashboards avançados
+- **Sentry integration** - Monitoramento de erros em produção
+- **APM (Application Performance Monitoring)** - New Relic/DataDog
+- **Distributed tracing** - Rastreamento de requisições complexas
+- **Real-time alerts** - Notificações proativas de problemas
 
 ---
 
