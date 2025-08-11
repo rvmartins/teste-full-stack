@@ -1,0 +1,777 @@
+{
+	"info": {
+		"name": "Teste Fullstack - Sistema de Clínicas API",
+		"description": "Collection completa para testar a API do Sistema de Clínicas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"version": "1.0.0"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🔐 Autenticação",
+			"item": [
+				{
+					"name": "Registrar Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Admin Sistema\",\n    \"email\": \"admin@clinicas.com\",\n    \"password\": \"123456\",\n    \"password_confirmation\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": ["{{base_url}}"],
+							"path": ["register"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@clinicas.com\",\n    \"password\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": ["{{base_url}}"],
+							"path": ["login"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Meu Perfil",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/me",
+							"host": ["{{base_url}}"],
+							"path": ["me"]
+						}
+					}
+				},
+				{
+					"name": "Alterar Senha",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\": \"123456\",\n    \"new_password\": \"nova123\",\n    \"new_password_confirmation\": \"nova123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/change-password",
+							"host": ["{{base_url}}"],
+							"path": ["change-password"]
+						}
+					}
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/refresh",
+							"host": ["{{base_url}}"],
+							"path": ["refresh"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/logout",
+							"host": ["{{base_url}}"],
+							"path": ["logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🏥 Entidades (Clínicas)",
+			"item": [
+				{
+					"name": "Listar Entidades",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/entidades?busca=&regional=&ativa=&sort_by=nome_fantasia&sort_order=asc",
+							"host": ["{{base_url}}"],
+							"path": ["entidades"],
+							"query": [
+								{
+									"key": "busca",
+									"value": "",
+									"description": "Buscar por razão social, nome fantasia ou CNPJ"
+								},
+								{
+									"key": "regional",
+									"value": "",
+									"description": "Filtrar por regional"
+								},
+								{
+									"key": "ativa",
+									"value": "",
+									"description": "1 para ativas, 0 para inativas"
+								},
+								{
+									"key": "sort_by",
+									"value": "nome_fantasia",
+									"description": "Campo para ordenação"
+								},
+								{
+									"key": "sort_order",
+									"value": "asc",
+									"description": "asc ou desc"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Criar Entidade",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"razao_social\": \"Clínica Exemplo Ltda\",\n    \"nome_fantasia\": \"Clínica Exemplo\",\n    \"cnpj\": \"12.345.678/0001-99\",\n    \"regional\": \"sp\",\n    \"data_inauguracao\": \"2023-01-15\",\n    \"ativa\": true,\n    \"especialidades\": [1, 2, 3, 4, 5]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/entidades",
+							"host": ["{{base_url}}"],
+							"path": ["entidades"]
+						}
+					}
+				},
+				{
+					"name": "Ver Entidade",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/entidades/1",
+							"host": ["{{base_url}}"],
+							"path": ["entidades", "1"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Entidade",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"razao_social\": \"Clínica Exemplo Atualizada Ltda\",\n    \"nome_fantasia\": \"Clínica Exemplo Atualizada\",\n    \"cnpj\": \"12.345.678/0001-99\",\n    \"regional\": \"sp\",\n    \"data_inauguracao\": \"2023-01-15\",\n    \"ativa\": true,\n    \"especialidades\": [1, 2, 3, 4, 5, 6]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/entidades/1",
+							"host": ["{{base_url}}"],
+							"path": ["entidades", "1"]
+						}
+					}
+				},
+				{
+					"name": "Excluir Entidade",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/entidades/1",
+							"host": ["{{base_url}}"],
+							"path": ["entidades", "1"]
+						}
+					}
+				},
+				{
+					"name": "Listar Regionais",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/entidades-regionais",
+							"host": ["{{base_url}}"],
+							"path": ["entidades-regionais"]
+						}
+					}
+				},
+				{
+					"name": "Listar Especialidades para Entidades",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/entidades-especialidades",
+							"host": ["{{base_url}}"],
+							"path": ["entidades-especialidades"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🩺 Especialidades",
+			"item": [
+				{
+					"name": "Listar Especialidades",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/especialidades?busca=&ativa=&sort_by=nome&sort_order=asc",
+							"host": ["{{base_url}}"],
+							"path": ["especialidades"],
+							"query": [
+								{
+									"key": "busca",
+									"value": "",
+									"description": "Buscar por nome"
+								},
+								{
+									"key": "ativa",
+									"value": "",
+									"description": "1 para ativas, 0 para inativas"
+								},
+								{
+									"key": "sort_by",
+									"value": "nome",
+									"description": "Campo para ordenação"
+								},
+								{
+									"key": "sort_order",
+									"value": "asc",
+									"description": "asc ou desc"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Criar Especialidade",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Cardiologia\",\n    \"descricao\": \"Especialidade médica focada no diagnóstico e tratamento de doenças do coração\",\n    \"ativa\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/especialidades",
+							"host": ["{{base_url}}"],
+							"path": ["especialidades"]
+						}
+					}
+				},
+				{
+					"name": "Ver Especialidade",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/especialidades/1",
+							"host": ["{{base_url}}"],
+							"path": ["especialidades", "1"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Especialidade",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Cardiologia Clínica\",\n    \"descricao\": \"Especialidade médica focada no diagnóstico e tratamento clínico de doenças cardiovasculares\",\n    \"ativa\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/especialidades/1",
+							"host": ["{{base_url}}"],
+							"path": ["especialidades", "1"]
+						}
+					}
+				},
+				{
+					"name": "Excluir Especialidade",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/especialidades/1",
+							"host": ["{{base_url}}"],
+							"path": ["especialidades", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "👥 Usuários",
+			"item": [
+				{
+					"name": "Listar Usuários",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users?busca=&ativo=&sort_by=nome&sort_order=asc",
+							"host": ["{{base_url}}"],
+							"path": ["users"],
+							"query": [
+								{
+									"key": "busca",
+									"value": "",
+									"description": "Buscar por nome ou email"
+								},
+								{
+									"key": "ativo",
+									"value": "",
+									"description": "1 para ativos, 0 para inativos"
+								},
+								{
+									"key": "sort_by",
+									"value": "nome",
+									"description": "Campo para ordenação"
+								},
+								{
+									"key": "sort_order",
+									"value": "asc",
+									"description": "asc ou desc"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Criar Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"João Silva\",\n    \"email\": \"joao@clinicas.com\",\n    \"password\": \"123456\",\n    \"password_confirmation\": \"123456\",\n    \"ativo\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": ["{{base_url}}"],
+							"path": ["users"]
+						}
+					}
+				},
+				{
+					"name": "Ver Usuário",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Usuário",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"João Silva Santos\",\n    \"email\": \"joao.santos@clinicas.com\",\n    \"ativo\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						}
+					}
+				},
+				{
+					"name": "Excluir Usuário",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "📊 Dashboard",
+			"item": [
+				{
+					"name": "Estatísticas Gerais",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/dashboard/stats",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "stats"]
+						}
+					}
+				},
+				{
+					"name": "Entidades por Regional",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/dashboard/entidades-por-regional",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "entidades-por-regional"]
+						}
+					}
+				},
+				{
+					"name": "Especialidades Populares",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/dashboard/especialidades-populares",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard", "especialidades-populares"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 Busca e Relacionamentos",
+			"item": [
+				{
+					"name": "Busca Global",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/busca?q=cardio",
+							"host": ["{{base_url}}"],
+							"path": ["busca"],
+							"query": [
+								{
+									"key": "q",
+									"value": "cardio",
+									"description": "Termo de busca"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Especialidades de uma Entidade",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/entidades/1/especialidades",
+							"host": ["{{base_url}}"],
+							"path": ["entidades", "1", "especialidades"]
+						}
+					}
+				},
+				{
+					"name": "Entidades de uma Especialidade",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/especialidades/1/entidades",
+							"host": ["{{base_url}}"],
+							"path": ["especialidades", "1", "entidades"]
+						}
+					}
+				},
+				{
+					"name": "Adicionar Especialidade à Entidade",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/entidades/1/especialidades/2",
+							"host": ["{{base_url}}"],
+							"path": ["entidades", "1", "especialidades", "2"]
+						}
+					}
+				},
+				{
+					"name": "Remover Especialidade da Entidade",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/entidades/1/especialidades/2",
+							"host": ["{{base_url}}"],
+							"path": ["entidades", "1", "especialidades", "2"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "📋 Utilidades",
+			"item": [
+				{
+					"name": "Status da API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/status",
+							"host": ["{{base_url}}"],
+							"path": ["status"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

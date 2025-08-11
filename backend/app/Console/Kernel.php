@@ -8,16 +8,17 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     /**
-     * The Artisan commands provided by your application.
+     * Os comandos Artisan fornecidos pela aplicação.
      *
      * @var array
      */
     protected $commands = [
-        //
+        // Adicione seu comando personalizado aqui
+        \App\Console\Commands\CustomRouteList::class,
     ];
 
     /**
-     * Define the application's command schedule.
+     * Define o agendamento de comandos da aplicação.
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
@@ -29,12 +30,16 @@ class Kernel extends ConsoleKernel
     }
 
     /**
-     * Register the Closure based commands for the application.
+     * Registra os comandos para a aplicação.
      *
      * @return void
      */
     protected function commands()
     {
-        require base_path('routes/console.php');
+        // No Laravel 5.4, não temos o método load
+        // Os comandos são registrados no array $commands acima
+        
+        // Se você tiver um arquivo routes/console.php, descomente a linha abaixo:
+        // require base_path('routes/console.php');
     }
 }
