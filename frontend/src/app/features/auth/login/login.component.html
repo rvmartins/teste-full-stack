@@ -1,0 +1,110 @@
+<div class="container-fluid vh-100">
+  <div class="row h-100">
+    <!-- Coluna da esquerda - Imagem/Branding -->
+    <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center bg-primary">
+      <div class="text-center text-white">
+        <h1 class="display-4 fw-bold mb-4">
+          <i class="bi bi-hospital"></i>
+          Sistema Clínico
+        </h1>
+        <p class="lead">
+          Gerencie entidades médicas, especialidades e usuários de forma simples e eficiente.
+        </p>
+      </div>
+    </div>
+
+    <!-- Coluna da direita - Formulário de Login -->
+    <div class="col-md-6 d-flex align-items-center justify-content-center">
+      <div class="w-100" style="max-width: 400px;">
+        <div class="text-center mb-4">
+          <h2 class="h3 mb-3 fw-normal">Entrar no Sistema</h2>
+          <p class="text-muted">Digite suas credenciais para acessar</p>
+        </div>
+
+        <!-- Mensagem de erro geral -->
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Formulário -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Campo Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                [class.is-invalid]="hasFieldError('email')"
+                formControlName="email"
+                placeholder="seu@email.com"
+              />
+              <div *ngIf="hasFieldError('email')" class="invalid-feedback">
+                {{ getFieldError('email') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo Senha -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Senha</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                [class.is-invalid]="hasFieldError('password')"
+                formControlName="password"
+                placeholder="Digite sua senha"
+              />
+              <div *ngIf="hasFieldError('password')" class="invalid-feedback">
+                {{ getFieldError('password') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão de Submit -->
+          <div class="d-grid mb-3">
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg"
+              [disabled]="isLoading || loginForm.invalid"
+            >
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status">
+                <span class="visually-hidden">Carregando...</span>
+              </span>
+              <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right me-2"></i>
+              {{ isLoading ? 'Entrando...' : 'Entrar' }}
+            </button>
+          </div>
+
+          <!-- Link para registro -->
+          <div class="text-center">
+            <p class="mb-0">
+              Não tem conta?
+              <a routerLink="/auth/register" class="text-decoration-none">
+                Cadastre-se aqui
+              </a>
+            </p>
+          </div>
+        </form>
+
+        <!-- Informações do sistema -->
+        <div class="text-center mt-4 pt-4 border-top">
+          <small class="text-muted">
+            <i class="bi bi-info-circle me-1"></i>
+            Sistema de Gerenciamento Clínico v1.0
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

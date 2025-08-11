@@ -1,0 +1,152 @@
+<div class="container-fluid vh-100">
+  <div class="row h-100">
+    <!-- Coluna da esquerda - Imagem/Branding -->
+    <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center bg-success">
+      <div class="text-center text-white">
+        <h1 class="display-4 fw-bold mb-4">
+          <i class="bi bi-person-plus"></i>
+          Junte-se a Nós
+        </h1>
+        <p class="lead">
+          Crie sua conta e comece a gerenciar entidades médicas de forma profissional.
+        </p>
+      </div>
+    </div>
+
+    <!-- Coluna da direita - Formulário de Registro -->
+    <div class="col-md-6 d-flex align-items-center justify-content-center">
+      <div class="w-100" style="max-width: 450px;">
+        <div class="text-center mb-4">
+          <h2 class="h3 mb-3 fw-normal">Criar Nova Conta</h2>
+          <p class="text-muted">Preencha os dados para se cadastrar</p>
+        </div>
+
+        <!-- Mensagem de erro geral -->
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Formulário -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Campo Nome -->
+          <div class="mb-3">
+            <label for="nome" class="form-label">Nome Completo</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-person"></i>
+              </span>
+              <input
+                type="text"
+                id="nome"
+                class="form-control"
+                [class.is-invalid]="hasFieldError('nome')"
+                formControlName="nome"
+                placeholder="Seu nome completo"
+              />
+              <div *ngIf="hasFieldError('nome')" class="invalid-feedback">
+                {{ getFieldError('nome') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                [class.is-invalid]="hasFieldError('email')"
+                formControlName="email"
+                placeholder="seu@email.com"
+              />
+              <div *ngIf="hasFieldError('email')" class="invalid-feedback">
+                {{ getFieldError('email') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo Senha -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Senha</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                [class.is-invalid]="hasFieldError('password')"
+                formControlName="password"
+                placeholder="Mínimo 6 caracteres"
+              />
+              <div *ngIf="hasFieldError('password')" class="invalid-feedback">
+                {{ getFieldError('password') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo Confirmação de Senha -->
+          <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirmar Senha</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-lock-fill"></i>
+              </span>
+              <input
+                type="password"
+                id="password_confirmation"
+                class="form-control"
+                [class.is-invalid]="hasFieldError('password_confirmation')"
+                formControlName="password_confirmation"
+                placeholder="Digite a senha novamente"
+              />
+              <div *ngIf="hasFieldError('password_confirmation')" class="invalid-feedback">
+                {{ getFieldError('password_confirmation') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão de Submit -->
+          <div class="d-grid mb-3">
+            <button
+              type="submit"
+              class="btn btn-success btn-lg"
+              [disabled]="isLoading || registerForm.invalid"
+            >
+              <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status">
+                <span class="visually-hidden">Carregando...</span>
+              </span>
+              <i *ngIf="!isLoading" class="bi bi-person-plus me-2"></i>
+              {{ isLoading ? 'Criando conta...' : 'Criar Conta' }}
+            </button>
+          </div>
+
+          <!-- Link para login -->
+          <div class="text-center">
+            <p class="mb-0">
+              Já tem uma conta?
+              <a routerLink="/auth/login" class="text-decoration-none">
+                Entre aqui
+              </a>
+            </p>
+          </div>
+        </form>
+
+        <!-- Informações do sistema -->
+        <div class="text-center mt-4 pt-4 border-top">
+          <small class="text-muted">
+            <i class="bi bi-shield-check me-1"></i>
+            Seus dados são protegidos e seguros
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

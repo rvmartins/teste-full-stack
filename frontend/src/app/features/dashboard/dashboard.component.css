@@ -1,0 +1,87 @@
+/* Estilos para o componente dashboard */
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  border-radius: 12px 12px 0 0 !important;
+  font-weight: 500;
+}
+
+.bi {
+  transition: color 0.3s ease;
+}
+
+.dropdown-toggle::after {
+  margin-left: 0.5rem;
+}
+
+.dropdown-menu {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.dropdown-header {
+  font-size: 0.875rem;
+  color: #6c757d !important;
+}
+
+.dropdown-item {
+  border-radius: 4px;
+  margin: 2px 8px;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.badge {
+  font-size: 0.875rem;
+}
+
+.alert {
+  border: none;
+  border-radius: 8px;
+  border-left: 4px solid #0dcaf0;
+}
+
+/* Animações */
+.card-body i {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-body i {
+  transform: scale(1.1);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .h2 {
+    font-size: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+  
+  .card-body i {
+    font-size: 1.5rem !important;
+  }
+}

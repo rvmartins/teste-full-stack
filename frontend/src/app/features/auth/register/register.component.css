@@ -1,0 +1,96 @@
+/* Estilos customizados para o componente de registro */
+
+.bg-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.form-control:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.btn-success {
+  background: linear-gradient(45deg, #28a745, #20c997);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: linear-gradient(45deg, #1e7e34, #17a2b8);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-success:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.alert-danger {
+  border-left: 4px solid #dc3545;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Indicador de força da senha */
+.form-control[formControlName="password"] {
+  position: relative;
+}
+
+.form-control[formControlName="password"]:valid {
+  border-color: #28a745;
+}
+
+.form-control[formControlName="password_confirmation"]:valid {
+  border-color: #28a745;
+}
+
+/* Responsividade */
+@media (max-width: 767.98px) {
+  .container-fluid {
+    padding: 2rem 1rem;
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+}
+
+/* Animações */
+.form-control {
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.alert {
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efeito visual para campos válidos */
+.form-control.is-valid {
+  border-color: #28a745;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='m2.3 6.73.7-.4 1.6-1.6.7-.4-.7-.4L3.9 3.5l-.7-.4-.7.4L1.5 4.5l-.8-.8-.7-.4-.7.4v.8l.7.4 1.4 1.4z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
