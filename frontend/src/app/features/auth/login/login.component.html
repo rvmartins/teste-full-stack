@@ -58,13 +58,21 @@
                 <i class="bi bi-lock"></i>
               </span>
               <input
-                type="password"
+                [type]="showPassword ? 'text' : 'password'"
                 id="password"
                 class="form-control"
                 [class.is-invalid]="hasFieldError('password')"
                 formControlName="password"
                 placeholder="Digite sua senha"
               />
+              <button
+                type="button"
+                class="btn btn-outline-secondary password-toggle-btn"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+              >
+                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+              </button>
               <div *ngIf="hasFieldError('password')" class="invalid-feedback">
                 {{ getFieldError('password') }}
               </div>

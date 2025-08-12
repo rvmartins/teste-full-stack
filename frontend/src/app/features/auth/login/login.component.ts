@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   isLoading = false;
   errorMessage = '';
   fieldErrors: { [key: string]: string[] } = {};
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -129,5 +130,12 @@ export class LoginComponent implements OnInit {
       password: 'Senha'
     };
     return labels[fieldName] || fieldName;
+  }
+
+  /**
+   * Alterna visibilidade da senha
+   */
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 }
