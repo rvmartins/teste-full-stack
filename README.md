@@ -54,7 +54,7 @@ Este projeto utiliza **Laravel 5.4** (lançado em Janeiro de 2017), uma versão 
 
 ```bash
 # Clonar o repositório
-git clone [seu-repositório]
+git clone https://github.com/rvmartins/teste-full-stack
 cd teste-full-stack
 
 # Executar com Docker Compose

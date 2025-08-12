@@ -1,0 +1,113 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 mb-0">Entidades Médicas</h2>
+        <a routerLink="/entidades/new" class="btn btn-primary">
+          <i class="bi bi-plus-lg me-1"></i>Nova Entidade
+        </a>
+      </div>
+
+      <!-- Mensagem de erro -->
+      <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-circle me-2"></i>
+        {{ errorMessage }}
+        <button type="button" class="btn-close" aria-label="Close" (click)="errorMessage = ''"></button>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" class="text-center py-4">
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+        <span class="ms-2">Carregando entidades...</span>
+      </div>
+
+      <!-- Tabela de entidades -->
+      <div *ngIf="!isLoading" class="card">
+        <div class="card-body">
+          <div class="table-responsive" *ngIf="entidades.length > 0; else noData">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Razão Social</th>
+                  <th scope="col">Nome Fantasia</th>
+                  <th scope="col">CNPJ</th>
+                  <th scope="col">Regional</th>
+                  <th scope="col">Especialidades</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Inauguração</th>
+                  <th scope="col" class="text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let entidade of entidades">
+                  <th scope="row">{{ entidade.id }}</th>
+                  <td>
+                    <strong>{{ entidade.razao_social }}</strong>
+                  </td>
+                  <td>
+                    <span class="text-muted">{{ entidade.nome_fantasia || 'N/A' }}</span>
+                  </td>
+                  <td>
+                    <small class="font-monospace">{{ formatCnpj(entidade.cnpj) }}</small>
+                  </td>
+                  <td>
+                    <span [class]="getRegionalClass(entidade.regional)">
+                      {{ entidade.regional }}
+                    </span>
+                  </td>
+                  <td>
+                    <small class="text-muted">{{ getEspecialidadesResumidas(entidade) }}</small>
+                  </td>
+                  <td>
+                    <span [class]="getStatusClass(entidade.ativa)">
+                      {{ getStatusText(entidade.ativa) }}
+                    </span>
+                  </td>
+                  <td>
+                    <small class="text-muted">{{ formatDate(entidade.data_inauguracao) }}</small>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm" role="group">
+                      <a 
+                        [routerLink]="['/entidades', entidade.id, 'edit']" 
+                        class="btn btn-sm btn-outline-primary"
+                        title="Editar entidade">
+                        <i class="bi bi-pencil"></i>
+                      </a>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-outline-danger"
+                        title="Excluir entidade"
+                        [disabled]="deletingEntidadeId === entidade.id"
+                        (click)="confirmDelete(entidade)">
+                        <span *ngIf="deletingEntidadeId === entidade.id" class="spinner-border spinner-border-sm" role="status">
+                          <span class="visually-hidden">Carregando...</span>
+                        </span>
+                        <i *ngIf="deletingEntidadeId !== entidade.id" class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mensagem quando não há dados -->
+          <ng-template #noData>
+            <div class="text-center py-5">
+              <i class="bi bi-building text-muted mb-3" style="font-size: 3rem;"></i>
+              <h5 class="text-muted">Nenhuma entidade encontrada</h5>
+              <p class="text-muted">Começe criando sua primeira entidade médica.</p>
+              <a routerLink="/entidades/new" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i>Nova Entidade
+              </a>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

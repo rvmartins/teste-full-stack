@@ -75,6 +75,9 @@ class EntidadesController extends Controller
      */
     public function store(Request $request)
     {
+        // Debug: Log dos dados recebidos
+        \Log::info('Dados recebidos no store:', $request->all());
+        
         $validator = Validator::make($request->all(), [
             'razao_social' => 'required|string|max:255',
             'nome_fantasia' => 'required|string|max:255',
@@ -82,11 +85,11 @@ class EntidadesController extends Controller
             'regional' => 'required|string',
             'data_inauguracao' => 'required|date',
             'ativa' => 'boolean',
-            'especialidades' => 'required|array|min:5',
+            'especialidades' => 'required|array|min:2',
             'especialidades.*' => 'exists:especialidades,id',
         ], [
             'cnpj.unique' => 'Este CNPJ já está cadastrado.',
-            'especialidades.min' => 'Selecione pelo menos 5 especialidades.',
+            'especialidades.min' => 'Selecione pelo menos 2 especialidades.',
             'especialidades.required' => 'As especialidades são obrigatórias.',
         ]);
 
@@ -98,6 +101,9 @@ class EntidadesController extends Controller
         });
 
         if ($validator->fails()) {
+            // Debug: Log dos erros de validação
+            \Log::info('Erros de validação:', $validator->errors()->toArray());
+            
             // Se for API, retorna erros em JSON
             if ($request->wantsJson() || $request->is('api/*')) {
                 return response()->json([
@@ -118,7 +124,7 @@ class EntidadesController extends Controller
             'cnpj' => $request->cnpj,
             'regional' => $request->regional,
             'data_inauguracao' => $request->data_inauguracao,
-            'ativa' => $request->has('ativa') ? true : false,
+            'ativa' => $request->get('ativa', false),
         ]);
 
         // Associar especialidades
@@ -180,11 +186,11 @@ class EntidadesController extends Controller
             'regional' => 'required|string',
             'data_inauguracao' => 'required|date',
             'ativa' => 'boolean',
-            'especialidades' => 'required|array|min:5',
+            'especialidades' => 'required|array|min:2',
             'especialidades.*' => 'exists:especialidades,id',
         ], [
             'cnpj.unique' => 'Este CNPJ já está cadastrado.',
-            'especialidades.min' => 'Selecione pelo menos 5 especialidades.',
+            'especialidades.min' => 'Selecione pelo menos 2 especialidades.',
             'especialidades.required' => 'As especialidades são obrigatórias.',
         ]);
 
@@ -215,7 +221,7 @@ class EntidadesController extends Controller
             'cnpj' => $request->cnpj,
             'regional' => $request->regional,
             'data_inauguracao' => $request->data_inauguracao,
-            'ativa' => $request->has('ativa') ? true : false,
+            'ativa' => $request->get('ativa', false),
         ]);
 
         // Atualizar especialidades

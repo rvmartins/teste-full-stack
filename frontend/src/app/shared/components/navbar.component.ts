@@ -59,14 +59,12 @@ import { User } from '../models';
             <!-- Futuros menus -->
             <li class="nav-item">
               <a 
-                class="nav-link disabled" 
-                href="#"
-                tabindex="-1"
-                aria-disabled="true"
+                class="nav-link" 
+                routerLink="/entidades"
+                routerLinkActive="active"
               >
                 <i class="bi bi-building me-1"></i>
                 Entidades
-                <small class="ms-1 text-muted">(Em breve)</small>
               </a>
             </li>
             <li class="nav-item">

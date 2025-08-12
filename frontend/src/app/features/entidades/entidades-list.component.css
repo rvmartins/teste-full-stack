@@ -31,6 +31,10 @@
 }
 
 
+.font-monospace {
+  font-family: 'SF Mono', SFMono-Regular, ui-monospace, 'DejaVu Sans Mono', Menlo, Consolas, monospace;
+}
+
 .btn-group .btn {
   border-radius: 0.25rem;
   margin-left: 0.25rem;

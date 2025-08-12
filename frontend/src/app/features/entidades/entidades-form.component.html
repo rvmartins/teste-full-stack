@@ -1,0 +1,237 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">
+            <i class="bi bi-building me-2"></i>
+            {{ getPageTitle() }}
+          </h4>
+        </div>
+        <div class="card-body">
+          <!-- Loading inicial -->
+          <div *ngIf="initialLoading" class="text-center py-4">
+            <div class="spinner-border" role="status" aria-hidden="true"></div>
+            <span class="ms-2">Carregando entidade...</span>
+          </div>
+
+          <!-- Mensagem de erro -->
+          <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            {{ errorMessage }}
+            <button type="button" class="btn-close" aria-label="Close" (click)="errorMessage = ''"></button>
+          </div>
+
+          <!-- Informações da entidade em modo de edição -->
+          <div *ngIf="isEditMode && currentEntidade && !initialLoading" class="alert alert-info mb-4">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>ID:</strong> {{ currentEntidade.id }}
+              </div>
+              <div class="col-md-6">
+                <strong>Criado em:</strong> {{ formatDate(currentEntidade.created_at) }}
+              </div>
+              <div class="col-md-6 mt-2" *ngIf="currentEntidade.updated_at">
+                <strong>Atualizado em:</strong> {{ formatDate(currentEntidade.updated_at) }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulário -->
+          <form *ngIf="!initialLoading" [formGroup]="entidadeForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <!-- Campo Razão Social -->
+              <div class="col-md-6 mb-3">
+                <label for="razao_social" class="form-label">
+                  Razão Social <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="razao_social"
+                  class="form-control"
+                  [class.is-invalid]="hasFieldError('razao_social')"
+                  formControlName="razao_social"
+                  placeholder="Digite a razão social">
+                <div *ngIf="hasFieldError('razao_social')" class="invalid-feedback">
+                  {{ getFieldError('razao_social') }}
+                </div>
+              </div>
+
+              <!-- Campo Nome Fantasia -->
+              <div class="col-md-6 mb-3">
+                <label for="nome_fantasia" class="form-label">
+                  Nome Fantasia <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="nome_fantasia"
+                  class="form-control"
+                  [class.is-invalid]="hasFieldError('nome_fantasia')"
+                  formControlName="nome_fantasia"
+                  placeholder="Digite o nome fantasia">
+                <div *ngIf="hasFieldError('nome_fantasia')" class="invalid-feedback">
+                  {{ getFieldError('nome_fantasia') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Campo CNPJ -->
+              <div class="col-md-6 mb-3">
+                <label for="cnpj" class="form-label">
+                  CNPJ <span class="text-danger">*</span>
+                  <span *ngIf="entidadeForm.get('cnpj')?.pending" class="spinner-border spinner-border-sm ms-2" role="status"></span>
+                </label>
+                <input
+                  type="text"
+                  id="cnpj"
+                  class="form-control font-monospace"
+                  [class.is-invalid]="hasFieldError('cnpj')"
+                  formControlName="cnpj"
+                  placeholder="00.000.000/0000-00"
+                  maxlength="18"
+                  cnpjMask>
+                <div *ngIf="hasFieldError('cnpj')" class="invalid-feedback">
+                  {{ getFieldError('cnpj') }}
+                </div>
+                <div class="form-text">
+                  Digite apenas números
+                  <span *ngIf="entidadeForm.get('cnpj')?.pending" class="text-muted ms-2">
+                    <i class="bi bi-search"></i> Verificando disponibilidade...
+                  </span>
+                </div>
+              </div>
+
+              <!-- Campo Regional -->
+              <div class="col-md-6 mb-3">
+                <label for="regional" class="form-label">
+                  Regional <span class="text-danger">*</span>
+                </label>
+                <select
+                  id="regional"
+                  class="form-select"
+                  [class.is-invalid]="hasFieldError('regional')"
+                  formControlName="regional">
+                  <option value="">Selecione uma regional</option>
+                  <option *ngFor="let regional of regionaisOptions" [value]="regional.value">
+                    {{ regional.label }}
+                  </option>
+                </select>
+                <div *ngIf="hasFieldError('regional')" class="invalid-feedback">
+                  {{ getFieldError('regional') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Campo Data de Inauguração -->
+              <div class="col-md-6 mb-3">
+                <label for="data_inauguracao" class="form-label">
+                  Data de Inauguração <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="date"
+                  id="data_inauguracao"
+                  class="form-control"
+                  [class.is-invalid]="hasFieldError('data_inauguracao')"
+                  formControlName="data_inauguracao">
+                <div *ngIf="hasFieldError('data_inauguracao')" class="invalid-feedback">
+                  {{ getFieldError('data_inauguracao') }}
+                </div>
+                <div class="form-text">Use o calendário para selecionar a data</div>
+              </div>
+
+              <!-- Campo Ativa -->
+              <div class="col-md-6 mb-3 d-flex align-items-end">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    id="ativa"
+                    class="form-check-input"
+                    formControlName="ativa">
+                  <label for="ativa" class="form-check-label">
+                    Entidade ativa
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Seção de Especialidades -->
+            <div class="mb-4">
+              <label class="form-label">
+                <i class="bi bi-heart-pulse me-1"></i>
+                Especialidades Médicas <span class="text-danger">*</span>
+              </label>
+              
+              <div *ngIf="especialidadesLoading" class="text-center py-3">
+                <div class="spinner-border spinner-border-sm" role="status"></div>
+                <span class="ms-2">Carregando especialidades...</span>
+              </div>
+
+              <div *ngIf="!especialidadesLoading" class="card bg-light">
+                <div class="card-body">
+                  <div *ngIf="especialidades.length === 0" class="text-center text-muted py-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Nenhuma especialidade disponível
+                  </div>
+                  
+                  <div *ngIf="especialidades.length > 0" class="row">
+                    <div *ngFor="let especialidade of especialidades" class="col-md-6 col-lg-4 mb-2">
+                      <div class="form-check">
+                        <input
+                          type="checkbox"
+                          [id]="'esp-' + especialidade.id"
+                          class="form-check-input"
+                          [checked]="isEspecialidadeSelecionada(especialidade.id)"
+                          (change)="onEspecialidadeChange(especialidade.id, $event)">
+                        <label [for]="'esp-' + especialidade.id" class="form-check-label">
+                          <strong>{{ especialidade.nome }}</strong>
+                          <div *ngIf="especialidade.descricao" class="small text-muted">
+                            {{ especialidade.descricao }}
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="hasFieldError('especialidades')" class="text-danger small mt-2">
+                {{ getFieldError('especialidades') }}
+              </div>
+              <div class="form-text">
+                Selecione pelo menos 2 especialidades que esta entidade oferece
+              </div>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="d-flex justify-content-between">
+              <a routerLink="/entidades" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Voltar
+              </a>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!isFormValid() || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!isLoading" [class]="isEditMode ? 'bi bi-check-lg me-1' : 'bi bi-plus-lg me-1'"></i>
+                {{ getSubmitButtonText() }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Card de ajuda -->
+      <div class="card mt-4 border-0 bg-light">
+        <div class="card-body text-center">
+          <div class="text-muted small">
+            <i class="bi bi-info-circle me-1"></i>
+            As entidades podem ser hospitais, clínicas ou outros estabelecimentos médicos
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

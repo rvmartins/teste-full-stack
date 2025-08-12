@@ -78,6 +78,26 @@ export const routes: Routes = [
     ]
   },
 
+  // Rotas de entidades
+  {
+    path: 'entidades',
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/entidades/entidades-list.component').then(m => m.EntidadesListComponent)
+      },
+      {
+        path: 'new',
+        loadComponent: () => import('./features/entidades/entidades-form.component').then(m => m.EntidadesFormComponent)
+      },
+      {
+        path: ':id/edit',
+        loadComponent: () => import('./features/entidades/entidades-form.component').then(m => m.EntidadesFormComponent)
+      }
+    ]
+  },
+
   // Rota 404 - deve ser a última
   {
     path: '**',
