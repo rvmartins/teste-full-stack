@@ -1,4 +1,4 @@
-# Teste Full Stack - Ger Financeiro Soluções
+# Teste Full Stack
 
 Este projeto é uma implementação completa do desafio descrito em:  
 **🔗 [https://github.com/gerfinanceirosolucoes/teste-full-stack](https://github.com/gerfinanceirosolucoes/teste-full-stack)**
