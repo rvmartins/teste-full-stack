@@ -76,7 +76,6 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(userData).subscribe({
       next: (response) => {
-        console.log('Registro realizado com sucesso:', response);
         this.router.navigate(['/dashboard']);
       },
       error: (error: ApiError) => {

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../core/auth/auth.service';
 import { User } from '../../shared/models';
+import { NavbarComponent } from '../../shared/components/navbar.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, NavbarComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -39,7 +40,7 @@ export class DashboardComponent implements OnInit {
       this.isLoading = true;
       this.authService.getCurrentUser().subscribe({
         next: (user) => {
-          console.log('Dados do usuário carregados:', user);
+          this.currentUser = user;
         },
         error: (error) => {
           console.error('Erro ao carregar dados do usuário:', error);
@@ -57,7 +58,6 @@ export class DashboardComponent implements OnInit {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        console.log('Logout realizado com sucesso');
         this.router.navigate(['/auth/login']);
       },
       error: (error) => {

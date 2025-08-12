@@ -68,8 +68,11 @@ class UsersController extends Controller
             'nome' => $request->nome,
             'email' => $request->email,
             'password' => $request->password,
-            'ativo' => $request->has('ativo') ? true : false,
+            'ativo' => $request->get('ativo', true),
         ]);
+
+        // Gerar token para novos usuários
+        $user->generateApiToken();
 
         // Se for API, retorna JSON
         if ($request->wantsJson() || $request->is('api/*')) {
@@ -140,7 +143,7 @@ class UsersController extends Controller
         $data = [
             'nome' => $request->nome,
             'email' => $request->email,
-            'ativo' => $request->has('ativo') ? true : false,
+            'ativo' => $request->get('ativo', false),
         ];
 
         // Só atualiza a senha se foi fornecida
@@ -149,6 +152,11 @@ class UsersController extends Controller
         }
 
         $user->update($data);
+
+        // Se não tem token, gerar um
+        if (!$user->api_token) {
+            $user->generateApiToken();
+        }
 
         // Se for API, retorna JSON
         if ($request->wantsJson() || $request->is('api/*')) {

@@ -206,5 +206,5 @@ dist
 # System files
 .DS_Store
 Thumbs.db
-.claude
+.claude/
 CLAUDE.MD

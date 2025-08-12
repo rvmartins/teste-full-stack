@@ -59,7 +59,6 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(credentials).subscribe({
       next: (response) => {
-        console.log('Login realizado com sucesso:', response);
         this.router.navigate(['/dashboard']);
       },
       error: (error: ApiError) => {

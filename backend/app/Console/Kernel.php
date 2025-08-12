@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         // Adicione seu comando personalizado aqui
         \App\Console\Commands\CustomRouteList::class,
+        \App\Console\Commands\GenerateUserTokens::class,
     ];
 
     /**

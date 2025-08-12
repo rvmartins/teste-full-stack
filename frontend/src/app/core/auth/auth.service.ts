@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, map, tap, catchError, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, map, tap, catchError, throwError, of } from 'rxjs';
 
 import { 
   User, 
@@ -64,10 +64,12 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/logout`, {})
       .pipe(
         tap(() => this.clearAuthData()),
-        catchError(() => {
-          // Mesmo com erro na API, limpa os dados locais
+        catchError((error) => {
+          // Mesmo com erro na API (401, 500, etc.), limpa os dados locais
+          console.log('Logout API failed, but clearing local data anyway:', error.status);
           this.clearAuthData();
-          return throwError(() => new Error('Erro no logout'));
+          // Retorna sucesso pois o objetivo (logout local) foi alcançado
+          return of({ success: true, message: 'Logout realizado localmente' });
         })
       );
   }
@@ -76,9 +78,9 @@ export class AuthService {
    * Obtém dados do usuário atual
    */
   getCurrentUser(): Observable<User> {
-    return this.http.get<{ success: boolean; data: User }>(`${this.API_URL}/me`)
+    return this.http.get<{ success: boolean; data: { user: User } }>(`${this.API_URL}/me`)
       .pipe(
-        map(response => response.data),
+        map(response => response.data.user),
         tap(user => {
           this.currentUserSubject.next(user);
           localStorage.setItem(this.USER_KEY, JSON.stringify(user));
@@ -130,10 +132,25 @@ export class AuthService {
    * Define dados de autenticação
    */
   private setAuthData(token: string, user: User): void {
+    // Limpa logs de debug antigos
+    this.clearDebugLogs();
+    
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     this.currentUserSubject.next(user);
     this.isAuthenticatedSubject.next(true);
+  }
+
+  /**
+   * Limpa logs de debug do localStorage
+   */
+  private clearDebugLogs(): void {
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith('debug_')) {
+        localStorage.removeItem(key);
+      }
+    });
   }
 
   /**
@@ -180,8 +197,8 @@ export class AuthService {
   private handleError = (error: any): Observable<never> => {
     console.error('Erro na API:', error);
     
-    // Se erro 401, limpa dados de auth
-    if (error.status === 401) {
+    // Se erro 401 e não é uma chamada de logout, limpa dados de auth
+    if (error.status === 401 && !error.url?.includes('/logout')) {
       this.clearAuthData();
     }
 

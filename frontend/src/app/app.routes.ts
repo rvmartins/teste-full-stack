@@ -38,6 +38,26 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
   },
 
+  // Rotas de usuários
+  {
+    path: 'users',
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/users/users-list.component').then(m => m.UsersListComponent)
+      },
+      {
+        path: 'new',
+        loadComponent: () => import('./features/users/users-form.component').then(m => m.UsersFormComponent)
+      },
+      {
+        path: ':id/edit',
+        loadComponent: () => import('./features/users/users-form.component').then(m => m.UsersFormComponent)
+      }
+    ]
+  },
+
   // Rota 404 - deve ser a última
   {
     path: '**',
