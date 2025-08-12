@@ -58,6 +58,26 @@ export const routes: Routes = [
     ]
   },
 
+  // Rotas de especialidades
+  {
+    path: 'especialidades',
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/especialidades/especialidades-list.component').then(m => m.EspecialidadesListComponent)
+      },
+      {
+        path: 'new',
+        loadComponent: () => import('./features/especialidades/especialidades-form.component').then(m => m.EspecialidadesFormComponent)
+      },
+      {
+        path: ':id/edit',
+        loadComponent: () => import('./features/especialidades/especialidades-form.component').then(m => m.EspecialidadesFormComponent)
+      }
+    ]
+  },
+
   // Rota 404 - deve ser a última
   {
     path: '**',

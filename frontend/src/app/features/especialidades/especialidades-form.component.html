@@ -1,0 +1,123 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">
+            <i class="bi bi-heart-pulse me-2"></i>
+            {{ getPageTitle() }}
+          </h4>
+        </div>
+        <div class="card-body">
+          <!-- Loading inicial -->
+          <div *ngIf="initialLoading" class="text-center py-4">
+            <div class="spinner-border" role="status" aria-hidden="true"></div>
+            <span class="ms-2">Carregando especialidade...</span>
+          </div>
+
+          <!-- Mensagem de erro -->
+          <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            {{ errorMessage }}
+            <button type="button" class="btn-close" aria-label="Close" (click)="errorMessage = ''"></button>
+          </div>
+
+          <!-- Informações da especialidade em modo de edição -->
+          <div *ngIf="isEditMode && currentEspecialidade && !initialLoading" class="alert alert-info mb-4">
+            <div class="row">
+              <div class="col-sm-6">
+                <strong>ID:</strong> {{ currentEspecialidade.id }}
+              </div>
+              <div class="col-sm-6">
+                <strong>Criado em:</strong> {{ formatDate(currentEspecialidade.created_at) }}
+              </div>
+              <div class="col-sm-6 mt-2" *ngIf="currentEspecialidade.updated_at">
+                <strong>Atualizado em:</strong> {{ formatDate(currentEspecialidade.updated_at) }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulário -->
+          <form *ngIf="!initialLoading" [formGroup]="especialidadeForm" (ngSubmit)="onSubmit()">
+            <!-- Campo Nome -->
+            <div class="mb-3">
+              <label for="nome" class="form-label">
+                Nome da Especialidade <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                id="nome"
+                class="form-control"
+                [class.is-invalid]="hasFieldError('nome')"
+                formControlName="nome"
+                placeholder="Digite o nome da especialidade">
+              <div *ngIf="hasFieldError('nome')" class="invalid-feedback">
+                {{ getFieldError('nome') }}
+              </div>
+            </div>
+
+            <!-- Campo Descrição -->
+            <div class="mb-3">
+              <label for="descricao" class="form-label">Descrição</label>
+              <textarea
+                id="descricao"
+                class="form-control"
+                [class.is-invalid]="hasFieldError('descricao')"
+                formControlName="descricao"
+                rows="3"
+                placeholder="Digite uma descrição para a especialidade (opcional)"></textarea>
+              <div *ngIf="hasFieldError('descricao')" class="invalid-feedback">
+                {{ getFieldError('descricao') }}
+              </div>
+              <div class="form-text">Máximo de 500 caracteres</div>
+            </div>
+
+            <!-- Campo Ativa -->
+            <div class="mb-4">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  id="ativa"
+                  class="form-check-input"
+                  formControlName="ativa">
+                <label for="ativa" class="form-check-label">
+                  Especialidade ativa
+                </label>
+              </div>
+              <div class="form-text">
+                Especialidades inativas não aparecerão nas listagens principais
+              </div>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="d-flex justify-content-between">
+              <a routerLink="/especialidades" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Voltar
+              </a>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!isFormValid() || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!isLoading" [class]="isEditMode ? 'bi bi-check-lg me-1' : 'bi bi-plus-lg me-1'"></i>
+                {{ getSubmitButtonText() }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Card de ajuda -->
+      <div class="card mt-4 border-0 bg-light">
+        <div class="card-body text-center">
+          <div class="text-muted small">
+            <i class="bi bi-info-circle me-1"></i>
+            As especialidades criadas aqui poderão ser associadas a entidades médicas
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

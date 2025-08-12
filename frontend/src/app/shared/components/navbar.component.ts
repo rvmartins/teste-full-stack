@@ -71,14 +71,12 @@ import { User } from '../models';
             </li>
             <li class="nav-item">
               <a 
-                class="nav-link disabled" 
-                href="#"
-                tabindex="-1"
-                aria-disabled="true"
+                class="nav-link" 
+                routerLink="/especialidades"
+                routerLinkActive="active"
               >
                 <i class="bi bi-heart-pulse me-1"></i>
                 Especialidades
-                <small class="ms-1 text-muted">(Em breve)</small>
               </a>
             </li>
           </ul>

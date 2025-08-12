@@ -89,7 +89,7 @@ class EspecialidadesController extends Controller
         $especialidade = Especialidade::create([
             'nome' => $request->nome,
             'descricao' => $request->descricao,
-            'ativa' => $request->has('ativa') ? true : false,
+            'ativa' => $request->get('ativa', true),
         ]);
 
         // Se for API, retorna JSON
@@ -163,7 +163,7 @@ class EspecialidadesController extends Controller
         $especialidade->update([
             'nome' => $request->nome,
             'descricao' => $request->descricao,
-            'ativa' => $request->has('ativa') ? true : false,
+            'ativa' => $request->get('ativa', false),
         ]);
 
         // Se for API, retorna JSON
