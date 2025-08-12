@@ -243,7 +243,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"razao_social\": \"Clínica Exemplo Ltda\",\n    \"nome_fantasia\": \"Clínica Exemplo\",\n    \"cnpj\": \"12.345.678/0001-99\",\n    \"regional\": \"sp\",\n    \"data_inauguracao\": \"2023-01-15\",\n    \"ativa\": true,\n    \"especialidades\": [1, 2, 3, 4, 5]\n}"
+							"raw": "{\n    \"razao_social\": \"Clínica Exemplo Ltda\",\n    \"nome_fantasia\": \"Clínica Exemplo\",\n    \"cnpj\": \"11.444.777/0001-61\",\n    \"regional\": \"Sudeste\",\n    \"data_inauguracao\": \"2023-01-15\",\n    \"ativa\": true,\n    \"especialidades\": [1, 2]\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/entidades",
@@ -285,7 +285,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"razao_social\": \"Clínica Exemplo Atualizada Ltda\",\n    \"nome_fantasia\": \"Clínica Exemplo Atualizada\",\n    \"cnpj\": \"12.345.678/0001-99\",\n    \"regional\": \"sp\",\n    \"data_inauguracao\": \"2023-01-15\",\n    \"ativa\": true,\n    \"especialidades\": [1, 2, 3, 4, 5, 6]\n}"
+							"raw": "{\n    \"razao_social\": \"Clínica Exemplo Atualizada Ltda\",\n    \"nome_fantasia\": \"Clínica Exemplo Atualizada\",\n    \"cnpj\": \"11.444.777/0001-61\",\n    \"regional\": \"Sudeste\",\n    \"data_inauguracao\": \"2023-01-15\",\n    \"ativa\": true,\n    \"especialidades\": [1, 2, 3]\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/entidades/1",
@@ -660,105 +660,20 @@
 			]
 		},
 		{
-			"name": "🔍 Busca e Relacionamentos",
-			"item": [
-				{
-					"name": "Busca Global",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/busca?q=cardio",
-							"host": ["{{base_url}}"],
-							"path": ["busca"],
-							"query": [
-								{
-									"key": "q",
-									"value": "cardio",
-									"description": "Termo de busca"
-								}
-							]
-						}
-					}
-				},
-				{
-					"name": "Especialidades de uma Entidade",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/entidades/1/especialidades",
-							"host": ["{{base_url}}"],
-							"path": ["entidades", "1", "especialidades"]
-						}
-					}
-				},
-				{
-					"name": "Entidades de uma Especialidade",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/especialidades/1/entidades",
-							"host": ["{{base_url}}"],
-							"path": ["especialidades", "1", "entidades"]
-						}
-					}
-				},
-				{
-					"name": "Adicionar Especialidade à Entidade",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/entidades/1/especialidades/2",
-							"host": ["{{base_url}}"],
-							"path": ["entidades", "1", "especialidades", "2"]
-						}
-					}
-				},
-				{
-					"name": "Remover Especialidade da Entidade",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/entidades/1/especialidades/2",
-							"host": ["{{base_url}}"],
-							"path": ["entidades", "1", "especialidades", "2"]
-						}
-					}
-				}
-			]
-		},
-		{
 			"name": "📋 Utilidades",
 			"item": [
+				{
+					"name": "Teste da API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/test",
+							"host": ["{{base_url}}"],
+							"path": ["test"]
+						}
+					}
+				},
 				{
 					"name": "Status da API",
 					"request": {

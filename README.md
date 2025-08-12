@@ -17,8 +17,8 @@ Este projeto roda completamente em Docker, facilitando a configuração e execu�
 | **PHP** | 7.4 | Backend runtime com Apache |
 | **Laravel** | 5.4 | Framework PHP (Janeiro 2017) |
 | **MariaDB** | 10.5 | Banco de dados |
-| **Angular** | Latest | Frontend framework |
-| **Bootstrap** | Latest | Framework CSS |
+| **Angular** | 17 | Frontend framework |
+| **Bootstrap** | 5 | Framework CSS |
 | **Apache** | 2.4 | Servidor web integrado |
 
 ---
@@ -35,6 +35,18 @@ Este projeto utiliza **Laravel 5.4** (lançado em Janeiro de 2017), uma versão 
 - ✅ **Comando personalizado** para listar rotas (`route:list-custom`)
 - ✅ **Correções de compatibilidade** para novas versões do PHP
 - ✅ **Sistema de fallback** para funcionalidades não disponíveis
+
+#### **Funcionalidades Implementadas:**
+- ✅ **CRUD completo de Entidades** (hospitais/clínicas)
+- ✅ **CRUD completo de Especialidades** médicas
+- ✅ **CRUD completo de Usuários** com autenticação
+- ✅ **Sistema de validação CNPJ** com algoritmo oficial
+- ✅ **Máscaras de entrada** para CNPJ e datas
+- ✅ **Interface responsiva** com Bootstrap 5
+- ✅ **Autenticação com token Bearer** e guards de rota
+- ✅ **Relacionamento many-to-many** entre entidades e especialidades
+- ✅ **Validações frontend e backend** sincronizadas
+- ✅ **Feedback visual** para ações do usuário
 
 #### **Limitações da Versão:**
 - ❌ Não possui helper `now()` (usamos `Carbon::now()`)
@@ -54,7 +66,7 @@ Este projeto utiliza **Laravel 5.4** (lançado em Janeiro de 2017), uma versão 
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/rvmartins/teste-full-stack
+git clone [URL_DO_SEU_REPOSITORIO]
 cd teste-full-stack
 
 # Executar com Docker Compose
@@ -449,18 +461,41 @@ services:
 │   │   │   ├── Controllers/
 │   │   │   │   ├── API/
 │   │   │   │   │   └── AuthController.php
+│   │   │   │   ├── EntidadesController.php
+│   │   │   │   ├── EspecialidadesController.php
+│   │   │   │   ├── UsersController.php
 │   │   │   │   └── DashboardController.php
 │   │   │   └── Middleware/
+│   │   ├── Models/
+│   │   │   ├── Entidade.php
+│   │   │   ├── Especialidade.php
+│   │   │   └── User.php
 │   │   ├── Console/
 │   │   │   └── Commands/
 │   │   │       └── CustomRouteList.php
-│   │   └── User.php
 │   ├── routes/
 │   │   ├── api.php             # Endpoints da API
 │   │   └── web.php             # Rotas web (comentadas)
 │   ├── database/
+│   │   ├── migrations/         # Migrações do banco
+│   │   └── seeds/              # Seeds para dados iniciais
 │   └── public/                 # DocumentRoot do Apache
 ├── frontend/                   # Angular + Bootstrap
+│   ├── src/app/
+│   │   ├── core/
+│   │   │   ├── services/       # Serviços HTTP
+│   │   │   ├── guards/         # Guards de autenticação
+│   │   │   └── interceptors/   # Interceptors HTTP
+│   │   ├── features/
+│   │   │   ├── auth/           # Autenticação
+│   │   │   ├── entidades/      # CRUD de entidades
+│   │   │   ├── especialidades/ # CRUD de especialidades
+│   │   │   └── users/          # CRUD de usuários
+│   │   ├── shared/
+│   │   │   ├── components/     # Componentes compartilhados
+│   │   │   ├── models/         # Interfaces TypeScript
+│   │   │   └── directives/     # Diretivas (máscaras)
+│   │   └── app.routes.ts       # Configuração de rotas
 ├── docker/
 │   ├── php/
 │   │   └── Dockerfile          # PHP 7.4 + Apache
@@ -580,6 +615,15 @@ docker exec -it frontend_app npm install
 - **RBAC (Role-Based Access Control)** - Sistema de papéis e permissões
 - **Criptografia de dados sensíveis** - Proteção de informações médicas
 - **Validação de entrada robusta** - Sanitização e validação avançada
+
+### 🔍 **Validações e Máscaras Implementadas**
+- **CNPJ com algoritmo oficial** - Validação frontend/backend sincronizada
+- **Máscaras de entrada** - CNPJ: 00.000.000/0000-00
+- **Validação de datas** - Formato brasileiro dd/mm/yyyy
+- **Campos obrigatórios** - Feedback visual em tempo real
+- **Especialidades mínimas** - Pelo menos 2 especialidades por entidade
+- **Emails únicos** - Verificação de duplicidade
+- **Senhas seguras** - Confirmação obrigatória
 
 ### 🚀 **Escalabilidade e Performance**
 - **Redis para cache** - Cache de consultas e sessões
